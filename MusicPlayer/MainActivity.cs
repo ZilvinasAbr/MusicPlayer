@@ -11,13 +11,13 @@ using Android.Provider;
 using Java.IO;
 using StringBuilder = System.Text.StringBuilder;
 
-namespace MusicPlayer2
+namespace MusicPlayer
 {
-    [Activity(Label = "MusicPlayer2", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Music Player", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        private MediaMetadataRetriever _reader = new MediaMetadataRetriever();
-        private List<string> _albumsList = new List<string>();
+        private readonly MediaMetadataRetriever _reader = new MediaMetadataRetriever();
+        private readonly List<string> _albumsList = new List<string>();
 
         protected override void OnCreate(Bundle bundle)
         {

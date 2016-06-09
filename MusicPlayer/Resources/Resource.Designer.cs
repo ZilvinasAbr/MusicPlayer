@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("MusicPlayer2.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("MusicPlayer.Resource", IsApplication=true)]
 
-namespace MusicPlayer2
+namespace MusicPlayer
 {
 	
 	

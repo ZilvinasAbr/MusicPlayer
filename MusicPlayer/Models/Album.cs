@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
-namespace MusicPlayer2.Models
+namespace MusicPlayer.Models
 {
     class Album
     {
