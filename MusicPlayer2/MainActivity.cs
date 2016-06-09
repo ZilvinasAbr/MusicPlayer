@@ -25,6 +25,16 @@ namespace MusicPlayer2
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
+
+            //Testing
+
+            WriteToInternalStorage();
+            ReadFromInternalStorage();
+
+            //
+
+
+
             // Get album list
             GetListAlbums(new File("/storage"));
             _albumsList.Sort();
@@ -121,6 +131,58 @@ namespace MusicPlayer2
             }
             return inFiles;
         }
+
+        private void WriteToInternalStorage()
+        {
+            string fileName = "test";
+            string text = "hello world";
+
+            var fos = OpenFileOutput(fileName, FileCreationMode.Private);
+            var bytes = GetBytes(text);
+            fos.Write(bytes, 0, bytes.Length);
+            fos.Close();
+        }
+
+        private void ReadFromInternalStorage()
+        {
+            string fileName = "test";
+            var fi = OpenFileInput(fileName);
+
+            byte[] bytes = new byte[100];
+
+            fi.Read(bytes, 0, 100);
+
+            string text = GetString(bytes);
+            fi.Close();
+        }
+
+        private byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        private string GetString(byte[] bytes)
+        {
+            char[] chars = new char[bytes.Length / sizeof(char)];
+            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
+            return new string(chars);
+        }
+
+        private bool SaveDataToInternalStorage()
+        {
+            string fileName = "musicList";
+            string text = "hello world";
+
+            var fos = OpenFileOutput(fileName, FileCreationMode.Private);
+            var bytes = GetBytes(text);
+            fos.Write(bytes, 0, bytes.Length);
+            fos.Close();
+
+            return true;
+        }
+
     }
 }
 
