@@ -12,8 +12,9 @@ using Android.Widget;
 
 namespace MusicPlayer.Models
 {
-    class Album
+    public class Album
     {
+        public string Name { get; set; }
         public IList<Song> Songs { get; set; }
     }
 }

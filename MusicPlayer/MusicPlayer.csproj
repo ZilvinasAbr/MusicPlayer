@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\HelperMethods.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Song.cs" />

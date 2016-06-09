@@ -61,7 +61,7 @@ namespace MusicPlayer
 		{
 			
 			// aapt resource value: 0x7f050000
-			public const int linearLayout1 = 2131034112;
+			public const int linearAlbumsLayout = 2131034112;
 			
 			static Id()
 			{

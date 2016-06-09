@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace MusicPlayer.Models
 {
-    class Song
+    public class Song
     {
         public string SongPath { get; set; }
         public string Title { get; set; }
@@ -21,7 +21,6 @@ namespace MusicPlayer.Models
         public string Year { get; set; }
         public string Track { get; set; }
         public string Genre { get; set; }
-        public string Comment { get; set; }
         public string AlbumArtist { get; set; }
     }
 }
