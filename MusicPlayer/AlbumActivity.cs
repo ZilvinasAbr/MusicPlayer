@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Media;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -12,6 +13,7 @@ using Android.Widget;
 using MusicPlayer.Helpers;
 using MusicPlayer.Models;
 using Newtonsoft.Json;
+using Uri = Android.Net.Uri;
 
 namespace MusicPlayer
 {
@@ -22,6 +24,7 @@ namespace MusicPlayer
         private string _albumName;
         private List<Album> _albums;
         private Album _album;
+        private static MediaPlayer _player = new MediaPlayer();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -50,7 +53,18 @@ namespace MusicPlayer
                 button.Id = i;
                 button.Click += delegate
                 {
+                    Song song = _album.Songs.SingleOrDefault(s => s.Title == button.Text);
 
+                    if (song != null)
+                    {
+                        //_player.Stop();
+                        _player.Reset();
+                        Uri uri = Uri.Parse(song.SongPath);
+                        _player.SetAudioStreamType(Stream.Music);
+                        _player.SetDataSource(ApplicationContext, uri);
+                        _player.Prepare();
+                        _player.Start();
+                    }
                 };
 
                 layout.AddView(button);
