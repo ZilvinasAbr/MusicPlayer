@@ -162,7 +162,8 @@ namespace MusicPlayer.Helpers
         {
             List<Album> albums = new List<Album>();
 
-            GenerateMusicDataHelper(new File("/storage"), albums);
+            GenerateMusicDataHelper(new File("/storage/external_SD/Muzika"), albums);
+            GenerateMusicDataHelper(new File("/storage/emulated/0/Music"), albums);
 
 
             return albums;

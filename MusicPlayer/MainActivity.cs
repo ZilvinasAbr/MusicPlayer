@@ -59,7 +59,7 @@ namespace MusicPlayer
                 //_albums = (List<Album>) JsonConvert.DeserializeObject(json);
             }
 
-
+            _albums.Sort();
             var layout = FindViewById<LinearLayout>(Resource.Id.linearAlbumsLayout);
 
             for (var i = 0; i < _albums.Count; i++)
@@ -68,6 +68,10 @@ namespace MusicPlayer
                 {
                     Text = _albums[i].Name,
                     Id = i
+                };
+                button.Click += delegate
+                {
+                    AlbumButtonPressed(button);
                 };
 
                 layout.AddView(button);
@@ -78,6 +82,13 @@ namespace MusicPlayer
         {
             var file = BaseContext.GetFileStreamPath(fileName);
             return file.Exists();
+        }
+
+        public void AlbumButtonPressed(Button button)
+        {
+            var albumActivity = new Intent(this, typeof(AlbumActivity));
+            albumActivity.PutExtra("AlbumName", button.Text);
+            StartActivity(albumActivity);
         }
     }
 }
