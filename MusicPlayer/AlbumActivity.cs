@@ -31,6 +31,30 @@ namespace MusicPlayer
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.Album);
 
+            var startPause = FindViewById<Button>(Resource.Id.startpause);
+            var nextSong = FindViewById<Button>(Resource.Id.nextSong);
+            var previousSong = FindViewById<Button>(Resource.Id.previousSong);
+
+            startPause.Click += delegate
+            {
+                if (_player.IsPlaying)
+                {
+                    _player.Pause();
+                }
+                else
+                {
+                    _player.Start();
+                }
+            };
+            startPause.Click += delegate
+            {
+
+            };
+            startPause.Click += delegate
+            {
+
+            };
+
             // Create your application here
             _albumName = Intent.GetStringExtra("AlbumName") ?? "";
             if (_albumName != "")
@@ -48,9 +72,11 @@ namespace MusicPlayer
 
             for (int i = 0; i < _album.Songs.Count; i++)
             {
-                var button = new Button(this);
-                button.Text = _album.Songs[i].Title;
-                button.Id = i;
+                var button = new Button(this)
+                {
+                    Text = _album.Songs[i].Title,
+                    Id = i
+                };
                 button.Click += delegate
                 {
                     Song song = _album.Songs.SingleOrDefault(s => s.Title == button.Text);
@@ -59,7 +85,7 @@ namespace MusicPlayer
                     {
                         //_player.Stop();
                         _player.Reset();
-                        Uri uri = Uri.Parse(song.SongPath);
+                        var uri = Uri.Parse(song.SongPath);
                         _player.SetAudioStreamType(Stream.Music);
                         _player.SetDataSource(ApplicationContext, uri);
                         _player.Prepare();

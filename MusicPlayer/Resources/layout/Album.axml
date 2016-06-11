@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:minWidth="25px"
-    android:minHeight="25px">
-  <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+<LinearLayout xmlns:p1="http://schemas.android.com/apk/res/android"
+    p1:orientation="vertical"
+    p1:layout_width="match_parent"
+    p1:layout_height="match_parent"
+    p1:id="@+id/linearLayout1">
+    <ScrollView
+        p1:minWidth="25px"
+        p1:minHeight="25px"
+        p1:layout_width="match_parent"
+        p1:layout_height="450dp"
+        p1:id="@+id/scrollView1">
+        <LinearLayout
+            p1:orientation="vertical"
+            p1:minWidth="25px"
+            p1:minHeight="25px"
+            p1:layout_width="match_parent"
+            p1:layout_height="match_parent"
+            p1:id="@+id/linearSongsLayout" />
+    </ScrollView>
     <LinearLayout
-        android:orientation="vertical"
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="match_parent"
-        android:layout_height="548.5dp"
-        android:id="@+id/linearSongsLayout"
-        android:layout_marginBottom="434.5dp" />
-  </ScrollView>
+        p1:orientation="horizontal"
+        p1:layout_width="match_parent"
+        p1:layout_height="50dp"
+        p1:id="@+id/linearLayout3">
+        <Button
+            p1:text="Previous"
+            p1:layout_width="wrap_content"
+            p1:layout_height="wrap_content"
+            p1:id="@+id/previousSong" />
+        <Button
+            p1:text="Start/Pause"
+            p1:layout_width="wrap_content"
+            p1:layout_height="wrap_content"
+            p1:id="@+id/startpause" />
+        <Button
+            p1:text="Next"
+            p1:layout_width="wrap_content"
+            p1:layout_height="wrap_content"
+            p1:id="@+id/nextSong" />
+    </LinearLayout>
 </LinearLayout>
