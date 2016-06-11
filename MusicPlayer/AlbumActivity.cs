@@ -108,12 +108,13 @@ namespace MusicPlayer
             {
                 var button = new Button(this)
                 {
-                    Text = _album.Songs[i].Title,
+                    Text = $"{i+1} {_album.Songs[i].Title}",
                     Id = i
                 };
                 button.Click += delegate
                 {
-                    Song song = _album.Songs.SingleOrDefault(s => s.Title == button.Text);
+                    //Song song = _album.Songs.SingleOrDefault(s => s.Title == button.Text);
+                    Song song = _album.Songs[button.Id];
 
                     if (song != null)
                     {

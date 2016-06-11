@@ -199,7 +199,7 @@ namespace MusicPlayer.Helpers
                             Year = Reader.ExtractMetadata(MetadataKey.Year),
                             SongPath = file.AbsolutePath,
                             Title = Reader.ExtractMetadata(MetadataKey.Title),
-                            Track = Reader.ExtractMetadata(MetadataKey.CdTrackNumber)
+                            TrackNumber = Reader.ExtractMetadata(MetadataKey.CdTrackNumber)
                         };
 
                         string albumName = newSong.Album;

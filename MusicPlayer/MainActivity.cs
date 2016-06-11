@@ -60,6 +60,12 @@ namespace MusicPlayer
             }
 
             _albums.Sort();
+
+            foreach (var album in _albums)
+            {
+                ((List<Song>) album.Songs).Sort();
+            }
+
             var layout = FindViewById<LinearLayout>(Resource.Id.linearAlbumsLayout);
 
             for (var i = 0; i < _albums.Count; i++)
