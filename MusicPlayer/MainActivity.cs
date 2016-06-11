@@ -21,8 +21,7 @@ namespace MusicPlayer
     public class MainActivity : Activity
     {
 
-        private const string MusicDataFileName = "musicData.json";
-        private List<Album> _albums;
+        
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -38,41 +37,41 @@ namespace MusicPlayer
             //var musicData = OpenFileOutput(MusicDataFileName, FileCreationMode.Private);
 
             // If there is no data saved about music files
-            if (!FileExists(MusicDataFileName))
+            if (!FileExists(ApplicationData.MusicDataFileName))
             {
                 // Generate music data
-                _albums = HelperMethods.GenerateMusicData();
-                var json = JsonConvert.SerializeObject(_albums);
+                ApplicationData.Albums = HelperMethods.GenerateMusicData();
+                var json = JsonConvert.SerializeObject(ApplicationData.Albums);
 
-                var musicData = OpenFileOutput(MusicDataFileName, FileCreationMode.Private);
+                var musicData = OpenFileOutput(ApplicationData.MusicDataFileName, FileCreationMode.Private);
                 HelperMethods.WriteJsonToInternalStorage(musicData, json);
                 musicData.Close();
             }
             else
             {
                 //Get music data from internal storage
-                var musicData = OpenFileInput(MusicDataFileName);
+                var musicData = OpenFileInput(ApplicationData.MusicDataFileName);
                 
                 var json = HelperMethods.ReadJsonFromInternalStorage(musicData);
                 musicData.Close();
-                _albums = JsonConvert.DeserializeObject<List<Album>>(json);
+                ApplicationData.Albums = JsonConvert.DeserializeObject<List<Album>>(json);
                 //_albums = (List<Album>) JsonConvert.DeserializeObject(json);
             }
 
-            _albums.Sort();
+            ApplicationData.Albums.Sort();
 
-            foreach (var album in _albums)
+            foreach (var album in ApplicationData.Albums)
             {
                 ((List<Song>) album.Songs).Sort();
             }
 
             var layout = FindViewById<LinearLayout>(Resource.Id.linearAlbumsLayout);
 
-            for (var i = 0; i < _albums.Count; i++)
+            for (var i = 0; i < ApplicationData.Albums.Count; i++)
             {
                 var button = new Button(this)
                 {
-                    Text = _albums[i].Name,
+                    Text = ApplicationData.Albums[i].Name,
                     Id = i
                 };
                 button.Click += delegate

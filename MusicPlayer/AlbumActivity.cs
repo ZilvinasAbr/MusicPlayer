@@ -22,11 +22,10 @@ namespace MusicPlayer
     {
         private const string MusicDataFileName = "musicData.json";
         private string _albumName;
-        private List<Album> _albums;
         private Album _album;
         private Song _currentSong;
 
-        private static MediaPlayer _player = new MediaPlayer();
+        private static readonly MediaPlayer Player = new MediaPlayer();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -39,13 +38,13 @@ namespace MusicPlayer
 
             startPause.Click += delegate
             {
-                if (_player.IsPlaying)
+                if (Player.IsPlaying)
                 {
-                    _player.Pause();
+                    Player.Pause();
                 }
                 else
                 {
-                    _player.Start();
+                    Player.Start();
                 }
             };
             nextSong.Click += delegate
@@ -54,18 +53,18 @@ namespace MusicPlayer
 
                 if (nextSongIndex >= _album.Songs.Count)
                 {
-                    _player.Reset();
+                    Player.Reset();
                     _currentSong = null;
                 }
                 else
                 {
                     _currentSong = _album.Songs[nextSongIndex];
-                    _player.Reset();
+                    Player.Reset();
                     var uri = Uri.Parse(_currentSong.SongPath);
-                    _player.SetAudioStreamType(Stream.Music);
-                    _player.SetDataSource(ApplicationContext, uri);
-                    _player.Prepare();
-                    _player.Start();
+                    Player.SetAudioStreamType(Stream.Music);
+                    Player.SetDataSource(ApplicationContext, uri);
+                    Player.Prepare();
+                    Player.Start();
                 }
             };
             previousSong.Click += delegate
@@ -74,18 +73,18 @@ namespace MusicPlayer
 
                 if (nextSongIndex < 0)
                 {
-                    _player.Reset();
+                    Player.Reset();
                     _currentSong = null;
                 }
                 else
                 {
                     _currentSong = _album.Songs[nextSongIndex];
-                    _player.Reset();
+                    Player.Reset();
                     var uri = Uri.Parse(_currentSong.SongPath);
-                    _player.SetAudioStreamType(Stream.Music);
-                    _player.SetDataSource(ApplicationContext, uri);
-                    _player.Prepare();
-                    _player.Start();
+                    Player.SetAudioStreamType(Stream.Music);
+                    Player.SetDataSource(ApplicationContext, uri);
+                    Player.Prepare();
+                    Player.Start();
                 }
             };
 
@@ -93,10 +92,10 @@ namespace MusicPlayer
             _albumName = Intent.GetStringExtra("AlbumName") ?? "";
             if (_albumName != "")
             {
+                this.Title = _albumName;
                 var musicData = OpenFileInput(MusicDataFileName);
                 var json = HelperMethods.ReadJsonFromInternalStorage(musicData);
-                _albums = JsonConvert.DeserializeObject<List<Album>>(json);
-                _album = _albums.SingleOrDefault(a => a.Name == _albumName);
+                _album = ApplicationData.Albums.SingleOrDefault(a => a.Name == _albumName);
             }
 
             if (_album == null)
@@ -120,12 +119,12 @@ namespace MusicPlayer
                     {
                         _currentSong = song;
                         //_player.Stop();
-                        _player.Reset();
+                        Player.Reset();
                         var uri = Uri.Parse(song.SongPath);
-                        _player.SetAudioStreamType(Stream.Music);
-                        _player.SetDataSource(ApplicationContext, uri);
-                        _player.Prepare();
-                        _player.Start();
+                        Player.SetAudioStreamType(Stream.Music);
+                        Player.SetDataSource(ApplicationContext, uri);
+                        Player.Prepare();
+                        Player.Start();
                     }
                 };
 

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumActivity.cs" />
+    <Compile Include="ApplicationData.cs" />
     <Compile Include="Helpers\HelperMethods.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Models\Album.cs" />
