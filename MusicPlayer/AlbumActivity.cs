@@ -24,6 +24,8 @@ namespace MusicPlayer
         private string _albumName;
         private List<Album> _albums;
         private Album _album;
+        private Song _currentSong;
+
         private static MediaPlayer _player = new MediaPlayer();
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -46,13 +48,45 @@ namespace MusicPlayer
                     _player.Start();
                 }
             };
-            startPause.Click += delegate
+            nextSong.Click += delegate
             {
+                var nextSongIndex = _album.Songs.IndexOf(_currentSong) + 1;
 
+                if (nextSongIndex >= _album.Songs.Count)
+                {
+                    _player.Reset();
+                    _currentSong = null;
+                }
+                else
+                {
+                    _currentSong = _album.Songs[nextSongIndex];
+                    _player.Reset();
+                    var uri = Uri.Parse(_currentSong.SongPath);
+                    _player.SetAudioStreamType(Stream.Music);
+                    _player.SetDataSource(ApplicationContext, uri);
+                    _player.Prepare();
+                    _player.Start();
+                }
             };
-            startPause.Click += delegate
+            previousSong.Click += delegate
             {
+                var nextSongIndex = _album.Songs.IndexOf(_currentSong) - 1;
 
+                if (nextSongIndex < 0)
+                {
+                    _player.Reset();
+                    _currentSong = null;
+                }
+                else
+                {
+                    _currentSong = _album.Songs[nextSongIndex];
+                    _player.Reset();
+                    var uri = Uri.Parse(_currentSong.SongPath);
+                    _player.SetAudioStreamType(Stream.Music);
+                    _player.SetDataSource(ApplicationContext, uri);
+                    _player.Prepare();
+                    _player.Start();
+                }
             };
 
             // Create your application here
@@ -83,6 +117,7 @@ namespace MusicPlayer
 
                     if (song != null)
                     {
+                        _currentSong = song;
                         //_player.Stop();
                         _player.Reset();
                         var uri = Uri.Parse(song.SongPath);
