@@ -35,6 +35,7 @@ namespace MusicPlayer
             var startPause = FindViewById<Button>(Resource.Id.startpause);
             var nextSong = FindViewById<Button>(Resource.Id.nextSong);
             var previousSong = FindViewById<Button>(Resource.Id.previousSong);
+            var songProgressBar = FindViewById<SeekBar>(Resource.Id.songProgressBar);
 
             startPause.Click += delegate
             {
@@ -125,11 +126,20 @@ namespace MusicPlayer
                         Player.SetDataSource(ApplicationContext, uri);
                         Player.Prepare();
                         Player.Start();
+                        songProgressBar.Max = Player.Duration;
                     }
                 };
 
                 layout.AddView(button);
             }
+
+            
+            var progressText = FindViewById<TextView>(Resource.Id.progressText);
+            songProgressBar.StopTrackingTouch += delegate
+            {
+                progressText.Text = $"{songProgressBar.Progress}";
+                Player.SeekTo(songProgressBar.Progress);
+            };
         }
     }
 }
