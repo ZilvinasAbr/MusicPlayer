@@ -50,25 +50,7 @@ namespace MusicPlayer
             };
             nextSong.Click += delegate
             {
-                var nextSongIndex = _album.Songs.IndexOf(_currentSong) + 1;
-
-                if (nextSongIndex >= _album.Songs.Count)
-                {
-                    Player.Reset();
-                    _currentSong = null;
-                }
-                else
-                {
-                    _currentSong = _album.Songs[nextSongIndex];
-                    Player.Reset();
-                    var uri = Uri.Parse(_currentSong.SongPath);
-                    Player.SetAudioStreamType(Stream.Music);
-                    Player.SetDataSource(ApplicationContext, uri);
-                    Player.Prepare();
-                    Player.Start();
-                    songProgressBar.Max = Player.Duration;
-                    songProgressBar.Progress = 0;
-                }
+                NextSong(songProgressBar);
             };
             previousSong.Click += delegate
             {
@@ -141,6 +123,11 @@ namespace MusicPlayer
             };
 
             SetCountDown();
+
+            Player.Completion += delegate
+            {
+                NextSong(songProgressBar);
+            };
         }
 
         private void SetCountDown()
@@ -153,6 +140,29 @@ namespace MusicPlayer
                 songProgressBar.Progress = Player.CurrentPosition;
             };
             timer.Enabled = true;
+        }
+
+        private void NextSong(SeekBar songProgressBar)
+        {
+            var nextSongIndex = _album.Songs.IndexOf(_currentSong) + 1;
+
+            if (nextSongIndex >= _album.Songs.Count)
+            {
+                Player.Reset();
+                _currentSong = null;
+            }
+            else
+            {
+                _currentSong = _album.Songs[nextSongIndex];
+                Player.Reset();
+                var uri = Uri.Parse(_currentSong.SongPath);
+                Player.SetAudioStreamType(Stream.Music);
+                Player.SetDataSource(ApplicationContext, uri);
+                Player.Prepare();
+                Player.Start();
+                songProgressBar.Max = Player.Duration;
+                songProgressBar.Progress = 0;
+            }
         }
     }
 }
