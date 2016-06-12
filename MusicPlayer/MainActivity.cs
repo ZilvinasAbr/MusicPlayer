@@ -20,51 +20,24 @@ namespace MusicPlayer
     [Activity(Label = "Music Player", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-
-        
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
+            // Loads music data to ApplicationData.Albums
+            LoadMusicData();
 
+            // Adds album buttons to the layout
+            AddAlbumButtons();
+            
+        }
 
+        #region Private methods
 
-
-
-            //var musicData = OpenFileOutput(MusicDataFileName, FileCreationMode.Private);
-
-            // If there is no data saved about music files
-            if (!FileExists(ApplicationData.MusicDataFileName))
-            {
-                // Generate music data
-                ApplicationData.Albums = HelperMethods.GenerateMusicData();
-                var json = JsonConvert.SerializeObject(ApplicationData.Albums);
-
-                var musicData = OpenFileOutput(ApplicationData.MusicDataFileName, FileCreationMode.Private);
-                HelperMethods.WriteJsonToInternalStorage(musicData, json);
-                musicData.Close();
-            }
-            else
-            {
-                //Get music data from internal storage
-                var musicData = OpenFileInput(ApplicationData.MusicDataFileName);
-                
-                var json = HelperMethods.ReadJsonFromInternalStorage(musicData);
-                musicData.Close();
-                ApplicationData.Albums = JsonConvert.DeserializeObject<List<Album>>(json);
-                //_albums = (List<Album>) JsonConvert.DeserializeObject(json);
-            }
-
-            ApplicationData.Albums.Sort();
-
-            foreach (var album in ApplicationData.Albums)
-            {
-                ((List<Song>) album.Songs).Sort();
-            }
-
+        private void AddAlbumButtons()
+        {
             var layout = FindViewById<LinearLayout>(Resource.Id.linearAlbumsLayout);
 
             for (var i = 0; i < ApplicationData.Albums.Count; i++)
@@ -80,20 +53,53 @@ namespace MusicPlayer
                 };
 
                 layout.AddView(button);
-            }   
+            }
         }
 
-        public bool FileExists(string fileName)
+        private void LoadMusicData()
+        {
+            // If there is no data saved about music files
+            if (!FileExists(ApplicationData.MusicDataFileName))
+            {
+                // Generate music data
+                ApplicationData.Albums = HelperMethods.GenerateMusicData();
+                var json = JsonConvert.SerializeObject(ApplicationData.Albums);
+
+                var musicData = OpenFileOutput(ApplicationData.MusicDataFileName, FileCreationMode.Private);
+                HelperMethods.WriteJsonToInternalStorage(musicData, json);
+                musicData.Close();
+            }
+            else
+            {
+                //Get music data from internal storage
+                var musicData = OpenFileInput(ApplicationData.MusicDataFileName);
+
+                var json = HelperMethods.ReadJsonFromInternalStorage(musicData);
+                musicData.Close();
+                ApplicationData.Albums = JsonConvert.DeserializeObject<List<Album>>(json);
+            }
+
+            ApplicationData.Albums.Sort();
+
+            foreach (var album in ApplicationData.Albums)
+            {
+                ((List<Song>)album.Songs).Sort();
+            }
+        }
+
+        private bool FileExists(string fileName)
         {
             var file = BaseContext.GetFileStreamPath(fileName);
             return file.Exists();
         }
 
-        public void AlbumButtonPressed(Button button)
+        private void AlbumButtonPressed(Button button)
         {
             var albumActivity = new Intent(this, typeof(AlbumActivity));
             albumActivity.PutExtra("AlbumName", button.Text);
             StartActivity(albumActivity);
         }
+
+        #endregion
     }
 }

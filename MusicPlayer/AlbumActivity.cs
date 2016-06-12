@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Timers;
 using Android.App;
 using Android.Content;
 using Android.Media;
@@ -21,7 +21,6 @@ namespace MusicPlayer
     public class AlbumActivity : Activity
     {
         private const string MusicDataFileName = "musicData.json";
-        private string _albumName;
         private Album _album;
         private Song _currentSong;
 
@@ -31,6 +30,7 @@ namespace MusicPlayer
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.Album);
+            // Create your application here
 
             var startPause = FindViewById<Button>(Resource.Id.startpause);
             var nextSong = FindViewById<Button>(Resource.Id.nextSong);
@@ -66,6 +66,8 @@ namespace MusicPlayer
                     Player.SetDataSource(ApplicationContext, uri);
                     Player.Prepare();
                     Player.Start();
+                    songProgressBar.Max = Player.Duration;
+                    songProgressBar.Progress = 0;
                 }
             };
             previousSong.Click += delegate
@@ -86,17 +88,16 @@ namespace MusicPlayer
                     Player.SetDataSource(ApplicationContext, uri);
                     Player.Prepare();
                     Player.Start();
+                    songProgressBar.Max = Player.Duration;
+                    songProgressBar.Progress = 0;
                 }
             };
 
-            // Create your application here
-            _albumName = Intent.GetStringExtra("AlbumName") ?? "";
-            if (_albumName != "")
+
+            Title = Intent.GetStringExtra("AlbumName") ?? "";
+            if (Title != "")
             {
-                this.Title = _albumName;
-                var musicData = OpenFileInput(MusicDataFileName);
-                var json = HelperMethods.ReadJsonFromInternalStorage(musicData);
-                _album = ApplicationData.Albums.SingleOrDefault(a => a.Name == _albumName);
+                _album = ApplicationData.Albums.SingleOrDefault(a => a.Name == Title);
             }
 
             if (_album == null)
@@ -111,22 +112,20 @@ namespace MusicPlayer
                     Text = $"{i+1} {_album.Songs[i].Title}",
                     Id = i
                 };
-                button.Click += delegate
+                button.Click += (sender, args) =>
                 {
-                    //Song song = _album.Songs.SingleOrDefault(s => s.Title == button.Text);
-                    Song song = _album.Songs[button.Id];
+                    _currentSong = _album.Songs[button.Id];
 
-                    if (song != null)
+                    if (_currentSong != null)
                     {
-                        _currentSong = song;
-                        //_player.Stop();
                         Player.Reset();
-                        var uri = Uri.Parse(song.SongPath);
+                        var uri = Uri.Parse(_currentSong.SongPath);
                         Player.SetAudioStreamType(Stream.Music);
                         Player.SetDataSource(ApplicationContext, uri);
                         Player.Prepare();
                         Player.Start();
                         songProgressBar.Max = Player.Duration;
+                        songProgressBar.Progress = 0;
                     }
                 };
 
@@ -140,6 +139,20 @@ namespace MusicPlayer
                 progressText.Text = $"{songProgressBar.Progress}";
                 Player.SeekTo(songProgressBar.Progress);
             };
+
+            SetCountDown();
+        }
+
+        private void SetCountDown()
+        {
+            var songProgressBar = FindViewById<SeekBar>(Resource.Id.songProgressBar);
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.Interval = 1000;
+            timer.Elapsed += (sender, args) =>
+            {
+                songProgressBar.Progress = Player.CurrentPosition;
+            };
+            timer.Enabled = true;
         }
     }
 }
